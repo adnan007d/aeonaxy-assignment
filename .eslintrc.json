@@ -1,7 +1,7 @@
 {
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "drizzle", "prettier"],
   "parser": "@typescript-eslint/parser",
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:drizzle/recommended"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "prefer-const": "warn",
@@ -26,6 +26,8 @@
       {
         "allow": ["arrowFunctions"]
       }
-    ]
+    ],
+    "drizzle/enforce-delete-with-where": "error",
+    "drizzle/enforce-update-with-where": "error"
   }
 }
