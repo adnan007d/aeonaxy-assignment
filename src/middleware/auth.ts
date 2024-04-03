@@ -62,3 +62,10 @@ export async function authenticate(
     return next(new APIError(401, "Unauthorized"));
   }
 }
+
+export function checkAdmin(req: Request, _res: Response, next: NextFunction) {
+  if (req.user.role !== "ADMIN") {
+    return next(new APIError(403, "Forbidden"));
+  }
+  return next();
+}

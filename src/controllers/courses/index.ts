@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import db from "@/db/drizzle";
 import { courses } from "@/db/schema";
 import { courseFilterSchema, paginateSchema } from "@/util/validations";
-import { eq, ilike, count } from "drizzle-orm";
+import { eq, ilike, count, and, type SQLWrapper } from "drizzle-orm";
 
 export async function getAllCourses(
   req: Request,
@@ -14,40 +14,40 @@ export async function getAllCourses(
     const pageQuery = paginateSchema.parse(req.query);
     const filters = courseFilterSchema.parse(req.query);
 
-    const countQuery = db.select({ count: count() }).from(courses);
+    const whereOptions: (SQLWrapper | undefined)[] = [];
 
-    const query = db
-      .select()
-      .from(courses)
-      .limit(pageQuery.limit)
-      .offset(pageQuery.limit * (pageQuery.page - 1));
+    // Only show published courses to non-admins
+    if (req.user?.role !== "ADMIN") {
+      whereOptions.push(eq(courses.published, true));
+    }
 
     // Is there a better way to do this?
     if (filters.name) {
-      const name = ilike(courses.name, `%${filters.name}%`);
-      query.where(name);
-      countQuery.where(name);
+      whereOptions.push(ilike(courses.name, `%${filters.name}%`));
     }
     if (filters.category) {
-      const category = ilike(courses.category, `%${filters.category}%`);
-      query.where(category);
-      countQuery.where(category);
+      whereOptions.push(ilike(courses.category, `%${filters.category}%`));
     }
     if (filters.price) {
-      const price = eq(courses.price, filters.price);
-      query.where(price);
-      countQuery.where(price);
+      whereOptions.push(eq(courses.price, filters.price));
     }
     if (filters.duration) {
-      const duration = eq(courses.duration, filters.duration);
-      query.where(duration);
-      countQuery.where(duration);
+      whereOptions.push(eq(courses.duration, filters.duration));
     }
 
-    const result = await query;
-    const countResult = await countQuery;
+    const countResult = await db
+      .select({ count: count() })
+      .from(courses)
+      .where(and(...whereOptions));
 
-    return res.json({ courses: result, total: countResult?.[0]?.count });
+    const result = await db
+      .select()
+      .from(courses)
+      .limit(pageQuery.limit)
+      .offset(pageQuery.limit * (pageQuery.page - 1))
+      .where(and(...whereOptions));
+
+    return res.json({ total: countResult?.[0]?.count, courses: result })
   } catch (error) {
     return next(error);
   }

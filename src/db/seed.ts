@@ -17,6 +17,7 @@ const coursesData = [
     description: "Basic math course",
     price: 100,
     duration: 30,
+    published: true,
   },
   {
     name: "English 101",
@@ -24,6 +25,7 @@ const coursesData = [
     description: "Basic english course",
     price: 100,
     duration: 30,
+    published: true,
   },
   {
     name: "Science 101",
@@ -31,6 +33,7 @@ const coursesData = [
     description: "Basic science course",
     price: 100,
     duration: 30,
+    published: true,
   },
   {
     name: "History 101",
@@ -38,6 +41,39 @@ const coursesData = [
     description: "Basic history course",
     price: 100,
     duration: 30,
+    published: true,
+  },
+  {
+    name: "Math 201",
+    category: "Math",
+    description: "Intermediate math course",
+    price: 200,
+    duration: 60,
+    published: true,
+  },
+  {
+    name: "English 201",
+    category: "English",
+    description: "Intermediate english course",
+    price: 200,
+    duration: 60,
+    published: true,
+  },
+  {
+    name: "Science 201",
+    category: "Science",
+    description: "Intermediate science course",
+    price: 200,
+    duration: 60,
+    published: true,
+  },
+  {
+    name: "History 201",
+    category: "History",
+    description: "Intermediate history course",
+    price: 200,
+    duration: 60,
+    published: true,
   },
 ];
 

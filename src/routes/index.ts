@@ -18,4 +18,7 @@ v1Router.get("/user/me", authenticate, getUser);
 // courses
 v1Router.get("/courses", getAllCourses);
 
+// for admin routes
+// v1Router.
+
 export default v1Router;
