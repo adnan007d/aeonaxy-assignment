@@ -26,3 +26,17 @@ export const loginUserSchema = insertUserSchema.pick({
 export type IUser = z.infer<typeof insertUserSchema>;
 
 export const insertCourseSchema = createInsertSchema(courses);
+
+// default page 1
+// default limit 12
+export const paginateSchema = z.object({
+  page: z.coerce.number().int().positive().default(1).catch(1),
+  limit: z.coerce.number().int().positive().max(12).default(12).catch(12),
+});
+
+export const courseFilterSchema = z.object({
+  name: z.string().optional(),
+  category: z.string().optional(),
+  price: z.coerce.number().optional(),
+  duration: z.coerce.number().optional(),
+});
