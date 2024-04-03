@@ -4,6 +4,6 @@ import { env } from "@/env";
 
 const sql = neon(env.DATABASE_URL!);
 
-const db = drizzle(sql);
+const db = drizzle(sql, { logger: env.NODE_ENV === "development" });
 
 export default db;
