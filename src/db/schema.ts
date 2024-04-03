@@ -1,3 +1,4 @@
+import { boolean } from "drizzle-orm/pg-core";
 import {
   integer,
   text,
@@ -34,6 +35,7 @@ export const courses = pgTable("courses", {
   image: text("image"),
   price: integer("price").notNull(),
   duration: integer("duration").notNull(),
+  published: boolean("published").notNull().default(false),
   created_at: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
