@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { config } from "dotenv";
-import { courses, users } from "./schema";
+import { courses, users } from "@/db/schema";
 import { hashPassword } from "@/util/util";
 
 config();

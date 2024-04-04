@@ -1,7 +1,7 @@
 import express from "express";
-import { requestLogger } from "./util/logger";
-import v1Router from "./routes";
-import { errorHandler } from "./util/util";
+import { requestLogger } from "@/util/logger";
+import v1Router from "@/routes";
+import { errorHandler } from "@/util/util";
 
 const app = express();
 

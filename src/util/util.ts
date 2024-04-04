@@ -8,7 +8,7 @@
 
 import type { Request, Response, NextFunction } from "express";
 import type { ZodIssue } from "zod";
-import logger from "./logger";
+import logger from "@/util/logger";
 import { NeonDbError } from "@neondatabase/serverless";
 
 import jwt from "jsonwebtoken";
