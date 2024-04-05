@@ -39,4 +39,5 @@ export const courseFilterSchema = z.object({
   category: z.string().optional(),
   price: z.coerce.number().optional(),
   duration: z.coerce.number().optional(),
+  published: z.coerce.boolean().optional(),
 });

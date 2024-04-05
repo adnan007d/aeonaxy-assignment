@@ -14,6 +14,12 @@ export async function getAllCourses(
     const pageQuery = paginateSchema.parse(req.query);
     const filters = courseFilterSchema.parse(req.query);
 
+    let publihedCourses: boolean | undefined = true;
+
+    if (req.user?.role === "ADMIN") {
+      publihedCourses = filters.published ?? undefined;
+    }
+
     const whereOptions = and(
       filters.name ? ilike(courses.name, `%${filters.name}%`) : undefined,
       filters.category
@@ -23,7 +29,10 @@ export async function getAllCourses(
       filters.duration ? eq(courses.duration, filters.duration) : undefined,
 
       // Only show published courses to non-admin users
-      req.user?.role !== "ADMIN" ? eq(courses.published, true) : undefined
+      // And admin can see all courses with filter
+      publihedCourses !== undefined
+        ? eq(courses.published, publihedCourses)
+        : undefined
     );
 
     const countResult = await db
