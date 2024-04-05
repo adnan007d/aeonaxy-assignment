@@ -9,7 +9,7 @@ import {
 import { authenticate, checkAdmin } from "@/middleware/auth";
 import { validate } from "@/middleware/validate";
 import { Router } from "express";
-import { addCourse } from "@/controllers/courses/admin";
+import { addCourse, updateCourse } from "@/controllers/courses/admin";
 
 const v1Router = Router();
 
@@ -31,6 +31,14 @@ v1Router.post(
   checkAdmin,
   validate(insertCourseSchema),
   addCourse
+);
+
+v1Router.put(
+  "/admin/courses/:id",
+  authenticate,
+  checkAdmin,
+  validate(insertCourseSchema),
+  updateCourse
 );
 
 export default v1Router;
