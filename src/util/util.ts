@@ -42,20 +42,9 @@ export function errorHandler(
         // if zodError doesn't exist it will result in undefined and not get passed to the client
         .json({ message: err.message, zodError: err.zodError ?? undefined })
     );
-  } else if (err instanceof NeonDbError) {
-    return handleNeonDbError(err, res);
   }
 
   return res.status(500).send("Internal Server Error");
-}
-
-function handleNeonDbError(err: NeonDbError, res: Response) {
-  switch (err.code) {
-    case "23505":
-      return res.status(400).json({ message: "User already exists" });
-    default:
-      return res.status(500).send({ message: "Internal Server Error" });
-  }
 }
 
 const SALT_ROUNDS = 10;

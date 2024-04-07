@@ -8,7 +8,7 @@ import type { NextFunction, Request, Response } from "express";
 import { comparePassword, generateToken, hashPassword } from "@/util/util";
 import { eq } from "drizzle-orm";
 import { APIError } from "@/util/util";
-
+import { NeonDbError } from "@neondatabase/serverless";
 
 // POST /api/v1/auth/signup
 export async function signup(req: Request, res: Response, next: NextFunction) {
@@ -24,6 +24,9 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
 
     return res.status(201).json({ id: result[0]?.id });
   } catch (error) {
+    if (error instanceof NeonDbError && error.code === "23505") {
+      return next(new APIError(400, "User already exists"));
+    }
     return next(error);
   }
 }
