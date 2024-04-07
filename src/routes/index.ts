@@ -2,6 +2,7 @@ import { getUser } from "@/controllers/user";
 import { getAllCategories, getAllCourses, getCourseById } from "@/controllers/courses";
 import { login, signup } from "@/controllers/user/auth";
 import {
+    enrollSchema,
   insertCourseSchema,
   insertUserSchema,
   loginUserSchema,
@@ -10,6 +11,7 @@ import { authenticate, checkAdmin } from "@/middleware/auth";
 import { validate } from "@/middleware/validate";
 import { Router } from "express";
 import { addCourse, deleteCourse, updateCourse } from "@/controllers/courses/admin";
+import { enrollCourse, getUserEnrollmentById, getUserEnrollments, unenrollCourse } from "@/controllers/enrollments";
 
 const v1Router = Router();
 
@@ -48,5 +50,22 @@ v1Router.get("/admin/courses/categories", authenticate, checkAdmin, getAllCatego
 v1Router.delete("/admin/courses/:id", authenticate, checkAdmin, deleteCourse);
 // Same as user one but with also return if course is published or not
 v1Router.get("/admin/courses/:id", authenticate, checkAdmin, getCourseById);
+
+
+// User Enrollments
+v1Router.get("/enrollments", authenticate, getUserEnrollments);
+v1Router.post("/enrollments", authenticate, validate(enrollSchema), enrollCourse);
+v1Router.get("/enrollments/:id", authenticate, getUserEnrollmentById);
+// eslint-disable-next-line drizzle/enforce-delete-with-where
+v1Router.delete("/enrollments/:id", authenticate, unenrollCourse)
+
+
+// Admin Enrollments
+v1Router.get("/admin/enrollments", authenticate, checkAdmin);
+v1Router.post("/admin/enrollments", authenticate, checkAdmin);
+v1Router.put("/admin/enrollments/:id", authenticate, checkAdmin);
+v1Router.get("/admin/enrollments/:id", authenticate, checkAdmin);
+// eslint-disable-next-line drizzle/enforce-delete-with-where
+v1Router.delete("/admin/enrollments/:id", authenticate, checkAdmin);
 
 export default v1Router;

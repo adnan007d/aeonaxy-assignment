@@ -47,6 +47,7 @@ export const courses = pgTable("courses", {
 export const enrollments = pgTable(
   "enrollments",
   {
+    enrollment_id: serial("enrollment_id").primaryKey(),
     user_id: integer("user_id")
       .notNull()
       .references(() => users.id),

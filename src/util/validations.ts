@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createInsertSchema } from "drizzle-zod";
-import { courses, users } from "@/db/schema";
+import { courses, enrollments, users } from "@/db/schema";
 export const insertUserSchema = createInsertSchema(users, {
   email: z.string().email("Invalid email"),
   password: z
@@ -40,4 +40,10 @@ export const courseFilterSchema = z.object({
   price: z.coerce.number().optional(),
   duration: z.coerce.number().optional(),
   published: z.coerce.boolean().optional(),
+});
+
+export const insertEnrollmentSchema = createInsertSchema(enrollments);
+
+export const enrollSchema = insertEnrollmentSchema.pick({
+  course_id: true,
 });
