@@ -3,6 +3,7 @@ import db from "@/db/drizzle";
 import { courses } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+// POST /api/v1/admin/courses
 export async function addCourse(
   req: Request,
   res: Response,
@@ -16,6 +17,7 @@ export async function addCourse(
   }
 }
 
+// PUT /api/v1/admin/courses/:id
 export async function updateCourse(
   req: Request,
   res: Response,

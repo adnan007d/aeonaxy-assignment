@@ -5,6 +5,8 @@ import { courses } from "@/db/schema";
 import { courseFilterSchema, paginateSchema } from "@/util/validations";
 import { eq, ilike, count, and } from "drizzle-orm";
 
+// GET /api/v1/courses
+// GET /api/v1/admin/courses
 export async function getAllCourses(
   req: Request,
   res: Response,

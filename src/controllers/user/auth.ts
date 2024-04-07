@@ -9,6 +9,8 @@ import { comparePassword, generateToken, hashPassword } from "@/util/util";
 import { eq } from "drizzle-orm";
 import { APIError } from "@/util/util";
 
+
+// POST /api/v1/auth/signup
 export async function signup(req: Request, res: Response, next: NextFunction) {
   const body: IUser = req.body;
 
@@ -26,6 +28,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+// POST /api/v1/auth/login
 export async function login(req: Request, res: Response, next: NextFunction) {
   const body: Pick<IUser, "email" | "password"> = req.body;
 
