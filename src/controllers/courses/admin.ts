@@ -39,6 +39,11 @@ export async function updateCourse(
       .set(body)
       .where(eq(courses.id, id))
       .returning();
+
+    if (course.length === 0) {
+      return next(new APIError(404, "Course not found"));
+    }
+
     return res.json({ course });
   } catch (error) {
     return next(error);
@@ -56,7 +61,12 @@ export async function deleteCourse(
     return next(new APIError(400, "Course ID is required"));
   }
   try {
-    await db.delete(courses).where(eq(courses.id, id));
+    const result = await db.delete(courses).where(eq(courses.id, id));
+
+    if (result.rowCount === 0) {
+      return next(new APIError(404, "Course not found"));
+    }
+
     return res.json({ message: "Course deleted successfully" });
   } catch (error) {
     return next(error);
