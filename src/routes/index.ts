@@ -9,7 +9,7 @@ import {
 import { authenticate, checkAdmin } from "@/middleware/auth";
 import { validate } from "@/middleware/validate";
 import { Router } from "express";
-import { addCourse, updateCourse } from "@/controllers/courses/admin";
+import { addCourse, deleteCourse, updateCourse } from "@/controllers/courses/admin";
 
 const v1Router = Router();
 
@@ -32,7 +32,6 @@ v1Router.post(
   validate(insertCourseSchema),
   addCourse
 );
-
 v1Router.put(
   "/admin/courses/:id",
   authenticate,
@@ -40,5 +39,7 @@ v1Router.put(
   validate(insertCourseSchema),
   updateCourse
 );
+// eslint-disable-next-line drizzle/enforce-delete-with-where
+v1Router.delete("/admin/courses/:id", authenticate, checkAdmin, deleteCourse);
 
 export default v1Router;

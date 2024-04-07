@@ -54,7 +54,7 @@ function handleNeonDbError(err: NeonDbError, res: Response) {
     case "23505":
       return res.status(400).json({ message: "User already exists" });
     default:
-      return res.status(500).send("Internal Server Error");
+      return res.status(500).send({ message: "Internal Server Error" });
   }
 }
 
