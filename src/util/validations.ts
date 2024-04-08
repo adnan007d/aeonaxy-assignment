@@ -47,3 +47,8 @@ export const insertEnrollmentSchema = createInsertSchema(enrollments);
 export const enrollSchema = insertEnrollmentSchema.pick({
   course_id: true,
 });
+
+export const enrollmentFilterSchema = z.object({
+  course_id: z.coerce.number().optional(),
+  user_id: z.coerce.number().optional(),
+});
