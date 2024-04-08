@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createInsertSchema } from "drizzle-zod";
-import { courses, enrollments, users } from "@/db/schema";
+import { courses, enrollments, rolesEnum, users } from "@/db/schema";
 export const insertUserSchema = createInsertSchema(users, {
   email: z.string().email("Invalid email"),
   password: z
@@ -26,6 +26,13 @@ export const loginUserSchema = insertUserSchema.pick({
 export type IUser = z.infer<typeof insertUserSchema>;
 
 export const insertCourseSchema = createInsertSchema(courses);
+
+export const userFilterSchema = z.object({
+  email: z.string().optional(),
+  name: z.string().optional(),
+  role: insertUserSchema.shape.role.optional(),
+});
+
 
 // default page 1
 // default limit 12

@@ -33,6 +33,13 @@ import {
   adminGetEnrollments,
   adminUpdateEnrollment,
 } from "@/controllers/enrollments/admin";
+import {
+  addUser,
+  deleteUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+} from "@/controllers/user/admin";
 
 const v1Router = Router();
 
@@ -42,6 +49,26 @@ v1Router.post("/auth/signup", validate(insertUserSchema), signup);
 
 // User
 v1Router.get("/user/me", authenticate, getUser);
+
+// Admin User
+v1Router.get("/admin/users", authenticate, checkAdmin, getAllUsers);
+v1Router.get("/admin/users/:id", authenticate, checkAdmin, getUserById);
+v1Router.put(
+  "/admin/users/:id",
+  authenticate,
+  checkAdmin,
+  validate(insertUserSchema),
+  updateUser
+);
+v1Router.post(
+  "/admin/users",
+  authenticate,
+  checkAdmin,
+  validate(insertUserSchema),
+  addUser
+);
+// eslint-disable-next-line drizzle/enforce-delete-with-where
+v1Router.delete("/admin/users/:id", authenticate, checkAdmin, deleteUser);
 
 // courses
 v1Router.get("/courses", getAllCourses);
