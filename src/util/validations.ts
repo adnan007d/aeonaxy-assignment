@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 import { createInsertSchema } from "drizzle-zod";
-import { courses, enrollments, rolesEnum, users } from "@/db/schema";
-export const insertUserSchema = createInsertSchema(users, {
+import { courses, enrollments, users } from "@/db/schema";
+
+export const insertUserAdminSchema = createInsertSchema(users, {
   email: z.string().email("Invalid email"),
   password: z
     .string()
@@ -16,6 +17,14 @@ export const insertUserSchema = createInsertSchema(users, {
         /[0-9]/.test(password)
       );
     }, "Password must contain at least one uppercase, one lowercase, and one number"),
+}).omit({
+  id: true,
+  created_at: true,
+  updated_at: true,
+});
+
+export const insertUserSchema = insertUserAdminSchema.omit({
+  role: true,
 });
 
 export const loginUserSchema = insertUserSchema.pick({
@@ -25,14 +34,17 @@ export const loginUserSchema = insertUserSchema.pick({
 
 export type IUser = z.infer<typeof insertUserSchema>;
 
-export const insertCourseSchema = createInsertSchema(courses);
-
 export const userFilterSchema = z.object({
   email: z.string().optional(),
   name: z.string().optional(),
-  role: insertUserSchema.shape.role.optional(),
+  role: createInsertSchema(users).shape.role.optional().catch(undefined),
 });
 
+export const insertCourseSchema = createInsertSchema(courses).omit({
+  created_at: true,
+  updated_at: true,
+  id: true,
+});
 
 // default page 1
 // default limit 12
@@ -49,7 +61,11 @@ export const courseFilterSchema = z.object({
   published: z.coerce.boolean().optional(),
 });
 
-export const insertEnrollmentSchema = createInsertSchema(enrollments);
+export const insertEnrollmentSchema = createInsertSchema(enrollments).omit({
+  created_at: true,
+  updated_at: true,
+  enrollment_id: true,
+});
 
 export const enrollSchema = insertEnrollmentSchema.pick({
   course_id: true,

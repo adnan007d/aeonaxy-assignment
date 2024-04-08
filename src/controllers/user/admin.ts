@@ -2,9 +2,12 @@ import type { Request, Response, NextFunction } from "express";
 import db from "@/db/drizzle";
 import { users } from "@/db/schema";
 import { paginateSchema, userFilterSchema } from "@/util/validations";
-import { count, and, eq, ilike } from "drizzle-orm";
+import { count, and, eq, ilike, getTableColumns } from "drizzle-orm";
 import { APIError } from "@/util/util";
 import { NeonDbError } from "@neondatabase/serverless";
+
+
+const {password: _, ...columnsWithoutPassword} = getTableColumns(users);
 
 // GET /admin/users
 export async function getAllUsers(
@@ -23,7 +26,7 @@ export async function getAllUsers(
     );
 
     const result = await db
-      .select()
+      .select(columnsWithoutPassword)
       .from(users)
       .limit(pageQuery.limit)
       .offset(pageQuery.limit * (pageQuery.page - 1))
@@ -34,7 +37,7 @@ export async function getAllUsers(
       .from(users)
       .where(whereOptions);
 
-    return res.json({ users: result, count: countResult[0]?.count });
+    return res.json({ total: countResult[0]?.count, users: result });
   } catch (error) {
     return next(error);
   }
@@ -53,7 +56,7 @@ export async function getUserById(
       return next(new APIError(400, "Invalid user id"));
     }
 
-    const result = await db.select().from(users).where(eq(users.id, id));
+    const result = await db.select(columnsWithoutPassword).from(users).where(eq(users.id, id));
 
     if (result.length === 0) {
       return next(new APIError(404, "User not found"));
@@ -91,6 +94,8 @@ export async function updateUser(
     if (!id || isNaN(id)) {
       return next(new APIError(400, "Invalid user id"));
     }
+
+    req.body.updated_at = new Date();
 
     const result = await db
       .update(users)

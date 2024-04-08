@@ -9,6 +9,7 @@ import {
   enrollSchema,
   insertCourseSchema,
   insertEnrollmentSchema,
+  insertUserAdminSchema,
   insertUserSchema,
   loginUserSchema,
 } from "@/util/validations";
@@ -57,14 +58,14 @@ v1Router.put(
   "/admin/users/:id",
   authenticate,
   checkAdmin,
-  validate(insertUserSchema),
+  validate(insertUserAdminSchema),
   updateUser
 );
 v1Router.post(
   "/admin/users",
   authenticate,
   checkAdmin,
-  validate(insertUserSchema),
+  validate(insertUserAdminSchema),
   addUser
 );
 // eslint-disable-next-line drizzle/enforce-delete-with-where

@@ -100,6 +100,8 @@ export async function adminUpdateEnrollment(
     return next(new APIError(400, "Enrollment ID is required"));
   }
 
+  req.body.updated_at = new Date();
+
   try {
     const result = await db
       .update(enrollments)
