@@ -50,10 +50,10 @@ export const enrollments = pgTable(
     enrollment_id: serial("enrollment_id").primaryKey(),
     user_id: integer("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     course_id: integer("course_id")
       .notNull()
-      .references(() => courses.id),
+      .references(() => courses.id, { onDelete: "cascade" }),
     created_at: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

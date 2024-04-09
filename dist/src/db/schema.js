@@ -39,10 +39,10 @@ exports.enrollments = (0, pg_core_2.pgTable)("enrollments", {
     enrollment_id: (0, pg_core_2.serial)("enrollment_id").primaryKey(),
     user_id: (0, pg_core_2.integer)("user_id")
         .notNull()
-        .references(() => exports.users.id),
+        .references(() => exports.users.id, { onDelete: "cascade" }),
     course_id: (0, pg_core_2.integer)("course_id")
         .notNull()
-        .references(() => exports.courses.id),
+        .references(() => exports.courses.id, { onDelete: "cascade" }),
     created_at: (0, pg_core_2.timestamp)("created_at", { withTimezone: true })
         .notNull()
         .defaultNow(),
