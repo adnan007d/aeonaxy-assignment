@@ -4,14 +4,21 @@ import {
   getAllCourses,
   getCourseById,
 } from "@/controllers/courses";
-import { login, signup } from "@/controllers/user/auth";
+import {
+  forgotPassword,
+  login,
+  resetPassword,
+  signup,
+} from "@/controllers/user/auth";
 import {
   enrollSchema,
+  forgotPasswordSchema,
   insertCourseSchema,
   insertEnrollmentSchema,
   insertUserAdminSchema,
   insertUserSchema,
   loginUserSchema,
+  resetPasswordSchema,
 } from "@/util/validations";
 import { authenticate, checkAdmin } from "@/middleware/auth";
 import { validate } from "@/middleware/validate";
@@ -47,6 +54,16 @@ const v1Router = Router();
 // Auth Login/Register user
 v1Router.post("/auth/login", validate(loginUserSchema), login);
 v1Router.post("/auth/signup", validate(insertUserSchema), signup);
+v1Router.post(
+  "/auth/password/forgot",
+  validate(forgotPasswordSchema),
+  forgotPassword
+);
+v1Router.post(
+  "/auth/password/reset/:token",
+  validate(resetPasswordSchema),
+  resetPassword
+);
 
 // User
 v1Router.get("/user/me", authenticate, getUser);

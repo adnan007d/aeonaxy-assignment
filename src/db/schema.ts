@@ -65,3 +65,17 @@ export const enrollments = pgTable(
     pk: primaryKey({ columns: [t.user_id, t.course_id] }),
   })
 );
+
+export const passwordRecovery = pgTable("password_recovery", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  token: text("token").notNull(),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});

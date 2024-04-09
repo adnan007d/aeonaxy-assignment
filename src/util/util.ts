@@ -9,7 +9,6 @@
 import type { Request, Response, NextFunction } from "express";
 import type { ZodIssue } from "zod";
 import logger from "@/util/logger";
-import { NeonDbError } from "@neondatabase/serverless";
 
 import jwt from "jsonwebtoken";
 import { env } from "@/env";
@@ -66,4 +65,12 @@ export async function hashPassword(password: string) {
 
 export async function comparePassword(password: string, hash: string) {
   return bcrypt.compare(password, hash);
+}
+
+export const PASSWORD_RESET_EXPIRY_IN_MINS = 5;
+
+export async function waitFor1_2Seconds() {
+  const seconds = Math.floor(Math.random() * 2) + 1 * 1000;
+
+  return new Promise((resolve) => setTimeout(resolve, seconds));
 }

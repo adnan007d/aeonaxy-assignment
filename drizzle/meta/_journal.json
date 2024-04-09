@@ -15,6 +15,13 @@
       "when": 1712507160296,
       "tag": "0001_solid_the_spike",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712662046097,
+      "tag": "0002_giant_tag",
+      "breakpoints": true
     }
   ]
 }

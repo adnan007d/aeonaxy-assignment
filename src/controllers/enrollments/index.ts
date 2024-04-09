@@ -1,11 +1,12 @@
 // User Enrollments
 import type { Request, Response, NextFunction } from "express";
 import db from "@/db/drizzle";
-import { enrollments } from "@/db/schema";
+import { courses, enrollments } from "@/db/schema";
 import { and, count, eq } from "drizzle-orm";
 import { paginateSchema } from "@/util/validations";
 import { APIError } from "@/util/util";
 import { NeonDbError } from "@neondatabase/serverless";
+import { sendMail } from "@/util/resend";
 
 // GET /api/v1/enrollments
 // TODO: Handle what happen if the course is deleted or unpublished
@@ -84,6 +85,23 @@ export async function enrollCourse(
 
   try {
     const result = await db.insert(enrollments).values(body).returning();
+
+    if (!result[0]) {
+      return next(new APIError(500, "Enrollment failed"));
+    }
+
+    // NOTE: Doing this only for email
+    const course = await db
+      .select({ name: courses.name })
+      .from(courses)
+      .where(eq(courses.id, result[0].course_id));
+
+    await sendMail({
+      to: req.user.email,
+      subject: "Enrollment Confirmation",
+      html: `<h1>You have successfully enrolled for ${course[0]?.name} course</h1>`,
+    });
+
     return res.status(201).json({ enrollment: result[0] });
   } catch (error) {
     if (error instanceof NeonDbError) {

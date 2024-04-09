@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { createInsertSchema } from "drizzle-zod";
 import { courses, enrollments, users } from "@/db/schema";
+import { type InferInsertModel } from "drizzle-orm";
 
 export const insertUserAdminSchema = createInsertSchema(users, {
   email: z.string().email("Invalid email"),
@@ -32,7 +33,7 @@ export const loginUserSchema = insertUserSchema.pick({
   password: true,
 });
 
-export type IUser = z.infer<typeof insertUserSchema>;
+export type IUser = InferInsertModel<typeof users>;
 
 export const userFilterSchema = z.object({
   email: z.string().optional(),
@@ -74,4 +75,12 @@ export const enrollSchema = insertEnrollmentSchema.pick({
 export const enrollmentFilterSchema = z.object({
   course_id: z.coerce.number().optional(),
   user_id: z.coerce.number().optional(),
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email"),
+});
+
+export const resetPasswordSchema = z.object({
+  password: insertUserAdminSchema.shape.password,
 });
