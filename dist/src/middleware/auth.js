@@ -24,9 +24,10 @@ async function authenticate(req, _res, next) {
             logger_1.default.error(payload, "Payload is not correct");
             return next(new util_1.APIError(401, "Unauthorized"));
         }
+        const { password: _, ...columnsWithoutPassword } = (0, drizzle_orm_1.getTableColumns)(schema_1.users);
         // check for user
         const result = await drizzle_1.default
-            .select()
+            .select(columnsWithoutPassword)
             .from(schema_1.users)
             .where((0, drizzle_orm_1.eq)(schema_1.users.id, payload.id));
         if (!result?.[0]) {

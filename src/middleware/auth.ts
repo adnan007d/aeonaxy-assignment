@@ -4,13 +4,13 @@ import { APIError } from "@/util/util";
 import { verifyToken } from "@/util/util";
 import { users } from "@/db/schema";
 import type { IUser } from "@/util/validations";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import logger from "@/util/logger";
 
 declare global {
   namespace Express {
     interface Request {
-      user: IUser;
+      user: Omit<IUser, "password">;
     }
   }
 }
@@ -43,9 +43,10 @@ export async function authenticate(
       return next(new APIError(401, "Unauthorized"));
     }
 
+    const {password:_, ...columnsWithoutPassword} = getTableColumns(users);
     // check for user
     const result = await db
-      .select()
+      .select(columnsWithoutPassword)
       .from(users)
       .where(eq(users.id, payload.id));
 
