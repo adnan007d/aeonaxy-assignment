@@ -11,7 +11,8 @@ const envSchema = z.object({
   LOG_FILE: z.string().default("pretty.log"),
   JWT_SECRET: z.string().min(32),
   RESEND_API_KEY: z.string().min(1),
-  RESEND_FROM_EMAIL: z.string().catch("Acme <onboarding@resend.dev>")
+  RESEND_FROM_EMAIL: z.string().catch("Acme <onboarding@resend.dev>"),
+  VERCEL: z.coerce.boolean().default(false),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
