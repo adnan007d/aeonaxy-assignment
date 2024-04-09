@@ -1,6 +1,6 @@
 import PinoHttp from "pino-http";
 import pino from "pino";
-import pinopretty from "pino-pretty";
+import _pinopretty from "pino-pretty";
 // import pinohttpprint from "pino-http-print";
 import { env } from "@/env";
 

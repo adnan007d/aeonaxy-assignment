@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestLogger = void 0;
 const pino_http_1 = __importDefault(require("pino-http"));
 const pino_1 = __importDefault(require("pino"));
+// import pinohttpprint from "pino-http-print";
 const env_1 = require("../env");
 function getDestination(file) {
     if (env_1.env.NODE_ENV === "development" || env_1.env.VERCEL) {
