@@ -3,10 +3,11 @@ import { neon } from "@neondatabase/serverless";
 import { config } from "dotenv";
 import { courses, users } from "@/db/schema";
 import { hashPassword } from "@/util/util";
+import { env } from "@/env";
 
 config();
 
-const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(env.DATABASE_URL!);
 
 const db = drizzle(sql);
 
@@ -81,13 +82,13 @@ const usersData = [
   {
     name: "John Doe",
     email: "johndoe@user.com",
-    password: "Pass@123",
+    password: env.PASSWORD_FOR_USER,
   },
 
   {
     name: "Admin",
     email: "admin@admin.com",
-    password: "Admin@123",
+    password: env.PASSWORD_FOR_ADMIN,
     role: "ADMIN" as const,
   },
 ];

@@ -5,8 +5,9 @@ const serverless_1 = require("@neondatabase/serverless");
 const dotenv_1 = require("dotenv");
 const schema_1 = require("../db/schema");
 const util_1 = require("../util/util");
+const env_1 = require("../env");
 (0, dotenv_1.config)();
-const sql = (0, serverless_1.neon)(process.env.DATABASE_URL);
+const sql = (0, serverless_1.neon)(env_1.env.DATABASE_URL);
 const db = (0, neon_http_1.drizzle)(sql);
 const coursesData = [
     {
@@ -78,12 +79,12 @@ const usersData = [
     {
         name: "John Doe",
         email: "johndoe@user.com",
-        password: "Pass@123",
+        password: env_1.env.PASSWORD_FOR_USER,
     },
     {
         name: "Admin",
         email: "admin@admin.com",
-        password: "Admin@123",
+        password: env_1.env.PASSWORD_FOR_ADMIN,
         role: "ADMIN",
     },
 ];

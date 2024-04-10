@@ -10,14 +10,10 @@ export const insertUserAdminSchema = createInsertSchema(users, {
     .string()
     .min(8, "Password must be at least 8 characters")
     .max(100, "Password must be at most 100 characters")
-    .refine((password) => {
-      // Change to a custom and efficient util function
-      return (
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password)
-      );
-    }, "Password must contain at least one uppercase, one lowercase, and one number"),
+    .regex(
+      /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/,
+      "Password must contain at least one uppercase, one lowercase, and one number"
+    ),
 }).omit({
   id: true,
   created_at: true,
