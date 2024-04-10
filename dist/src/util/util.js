@@ -10,11 +10,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.waitFor1_2Seconds = exports.PASSWORD_RESET_EXPIRY_IN_MINS = exports.comparePassword = exports.hashPassword = exports.verifyToken = exports.generateToken = exports.errorHandler = exports.APIError = void 0;
+exports.RateLimit = exports.waitFor1_2Seconds = exports.PASSWORD_RESET_EXPIRY_IN_MINS = exports.comparePassword = exports.hashPassword = exports.verifyToken = exports.generateToken = exports.errorHandler = exports.APIError = void 0;
 const logger_1 = __importDefault(require("../util/logger"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const env_1 = require("../env");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const express_rate_limit_1 = require("express-rate-limit");
 class APIError extends Error {
     status;
     zodError;
@@ -59,3 +60,17 @@ async function waitFor1_2Seconds() {
     return new Promise((resolve) => setTimeout(resolve, seconds));
 }
 exports.waitFor1_2Seconds = waitFor1_2Seconds;
+function RateLimit({ windowInMinutes, maxRequests }) {
+    return (0, express_rate_limit_1.rateLimit)({
+        windowMs: windowInMinutes * 60 * 1000,
+        limit: maxRequests,
+        standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+        handler: (_req, res, _next, options) => {
+            res.status(429).json({
+                message: options.message,
+            });
+        },
+    });
+}
+exports.RateLimit = RateLimit;
