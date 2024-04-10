@@ -30,6 +30,7 @@
     "drizzle-orm": "^0.30.6",
     "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "pino": "^8.19.0",
     "pino-http": "^9.0.0",

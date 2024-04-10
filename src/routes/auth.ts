@@ -13,8 +13,16 @@ import {
   resetPasswordSchema,
 } from "@/util/validations";
 import { validate } from "@/middleware/validate";
+import { RateLimit } from "@/util/util";
 
 const authRouter = Router();
+
+const reqPerMin3 = RateLimit({
+  windowInMinutes: 1,
+  maxRequests: 3,
+});
+
+authRouter.use(reqPerMin3);
 
 // Auth Login/Register user
 authRouter.post("/login", validate(loginUserSchema), login);

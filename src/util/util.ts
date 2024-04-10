@@ -13,6 +13,7 @@ import logger from "@/util/logger";
 import jwt from "jsonwebtoken";
 import { env } from "@/env";
 import bcrypt from "bcrypt";
+import { rateLimit } from "express-rate-limit";
 
 export class APIError extends Error {
   public zodError?: ZodIssue[];
@@ -73,4 +74,23 @@ export async function waitFor1_2Seconds() {
   const seconds = Math.floor(Math.random() * 2) + 1 * 1000;
 
   return new Promise((resolve) => setTimeout(resolve, seconds));
+}
+
+type RateLimitOptions = {
+  windowInMinutes: number;
+  maxRequests: number;
+};
+
+export function RateLimit({ windowInMinutes, maxRequests }: RateLimitOptions) {
+  return rateLimit({
+    windowMs: windowInMinutes * 60 * 1000,
+    limit: maxRequests,
+    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    handler: (_req, res, _next, options) => {
+      res.status(429).json({
+        message: options.message,
+      });
+    },
+  });
 }
